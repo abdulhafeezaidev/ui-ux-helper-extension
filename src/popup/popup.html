@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI/UX Helper — AI Website Reverse Engineering Platform</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <div id="app" class="app-container">
+      <!-- Header -->
+      <header class="header-bar">
+        <div class="brand">
+          <div class="title-wrap">
+            <h1 class="app-title">UI/UX Helper</h1>
+            <span class="app-subtitle">Design Intelligence & Reverse Engineering</span>
+          </div>
+        </div>
+        <div id="statusBadge" class="status-badge status-idle">
+          <span class="dot"></span>
+          <span id="statusText">Idle</span>
+        </div>
+      </header>
+
+      <!-- Active Page Meta -->
+      <section class="page-meta-bar">
+        <div class="page-info">
+          <span id="pageTitle" class="page-title">Current Page</span>
+          <span id="pageUrl" class="page-url">about:blank</span>
+        </div>
+        <div class="page-stats">
+          <span id="viewportBadge" class="stat-tag">-- × --</span>
+          <span id="elementCountBadge" class="stat-tag">0 elements</span>
+        </div>
+      </section>
+
+      <!-- Action Bar -->
+      <div class="action-bar">
+        <button id="btnAnalyzePage" class="btn btn-primary btn-hero">
+          Analyze Page
+        </button>
+        <button id="btnReanalyze" class="btn btn-secondary" disabled>
+          Re-analyze
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="inspector-tabs">
+        <button class="tab-btn active" data-tab="tab-overview">Overview & Export</button>
+        <button class="tab-btn" data-tab="tab-colors">Colors</button>
+        <button class="tab-btn" data-tab="tab-typography">Typography</button>
+        <button class="tab-btn" data-tab="tab-spacing">Spacing</button>
+        <button class="tab-btn" data-tab="tab-layout">Layout</button>
+        <button class="tab-btn" data-tab="tab-components">Components</button>
+        <button class="tab-btn" data-tab="tab-inspector">Element</button>
+      </nav>
+
+      <!-- Main Inspector Views -->
+      <main class="inspector-content">
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden">Toast message</div>
+
+        <!-- 1. Overview & Export Panel -->
+        <section id="tab-overview" class="tab-panel active">
+          <!-- Clone Readiness Dashboard Card -->
+          <div class="readiness-card">
+            <div class="readiness-header">
+              <div class="readiness-title-row">
+                <span class="readiness-label">Clone Readiness</span>
+                <span id="readinessVerdictBadge" class="readiness-badge badge-production">Production Ready</span>
+              </div>
+              <div class="readiness-score-row">
+                <div class="score-display">
+                  <span id="readinessScoreVal" class="score-number">98%</span>
+                  <span id="readinessStars" class="star-rating">★★★★★</span>
+                </div>
+                <button id="btnToggleDiagnostics" class="btn-text-link">
+                  Diagnostics <span id="diagArrow">▼</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Expandable Diagnostics Breakdown -->
+            <div id="diagnosticsBreakdown" class="diagnostics-panel hidden">
+              <div class="diagnostic-row">
+                <span class="diag-name">Design System</span>
+                <div class="diag-bar-track"><div id="diagBarDesign" class="diag-bar-fill" style="width: 100%;"></div></div>
+                <span id="diagValDesign" class="diag-val">100%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Components</span>
+                <div class="diag-bar-track"><div id="diagBarComponents" class="diag-bar-fill" style="width: 99%;"></div></div>
+                <span id="diagValComponents" class="diag-val">99%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Layout</span>
+                <div class="diag-bar-track"><div id="diagBarLayout" class="diag-bar-fill" style="width: 100%;"></div></div>
+                <span id="diagValLayout" class="diag-val">100%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Responsive</span>
+                <div class="diag-bar-track"><div id="diagBarResponsive" class="diag-bar-fill" style="width: 96%;"></div></div>
+                <span id="diagValResponsive" class="diag-val">96%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Animations</span>
+                <div class="diag-bar-track"><div id="diagBarAnimations" class="diag-bar-fill" style="width: 92%;"></div></div>
+                <span id="diagValAnimations" class="diag-val">92%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Accessibility</span>
+                <div class="diag-bar-track"><div id="diagBarAccessibility" class="diag-bar-fill" style="width: 98%;"></div></div>
+                <span id="diagValAccessibility" class="diag-val">98%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-name">Assets</span>
+                <div class="diag-bar-track"><div id="diagBarAssets" class="diag-bar-fill" style="width: 100%;"></div></div>
+                <span id="diagValAssets" class="diag-val">100%</span>
+              </div>
+              <div class="diagnostic-row diagnostic-overall">
+                <span class="diag-name">Overall Confidence</span>
+                <div class="diag-bar-track"><div id="diagBarOverall" class="diag-bar-fill diag-bar-accent" style="width: 97%;"></div></div>
+                <span id="diagValOverall" class="diag-val">97%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LEVEL 1: Primary Output (Hero Focus) -->
+          <div class="hero-export-card">
+            <div class="hero-card-header">
+              <div class="hero-title-wrap">
+                <div>
+                  <h2 class="hero-title">Generate AI Clone</h2>
+                  <p class="hero-subtitle">Production-ready reconstruction package for AI coding agents.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-features-grid">
+              <div class="feature-item"><span class="check">✓</span> Design System</div>
+              <div class="feature-item"><span class="check">✓</span> Components</div>
+              <div class="feature-item"><span class="check">✓</span> Variants</div>
+              <div class="feature-item"><span class="check">✓</span> Layout Intelligence</div>
+              <div class="feature-item"><span class="check">✓</span> Responsive Rules</div>
+              <div class="feature-item"><span class="check">✓</span> Motion & Animations</div>
+              <div class="feature-item"><span class="check">✓</span> Interactions</div>
+              <div class="feature-item"><span class="check">✓</span> Accessibility</div>
+              <div class="feature-item"><span class="check">✓</span> Assets</div>
+              <div class="feature-item"><span class="check">✓</span> AI Reconstruction Prompt</div>
+              <div class="feature-item"><span class="check">✓</span> Evidence & Traceability</div>
+            </div>
+
+            <div class="package-level-selector" style="display: flex; gap: 6px; margin: 12px 0;">
+              <button type="button" class="btn-level active" data-level="full" id="btnLevel3" style="flex: 1; padding: 6px 4px; font-size: 11px; border: 1px solid var(--border-default, #e5e5e5); border-radius: 6px; background: var(--bg-surface-active, #f0f0f0); cursor: pointer; text-align: center;">
+                <strong>Level 3</strong><br><span style="color: #666; font-size: 10px;">Full Clone</span>
+              </button>
+              <button type="button" class="btn-level" data-level="standard" id="btnLevel2" style="flex: 1; padding: 6px 4px; font-size: 11px; border: 1px solid var(--border-default, #e5e5e5); border-radius: 6px; background: var(--bg-surface, #fff); cursor: pointer; text-align: center;">
+                <strong>Level 2</strong><br><span style="color: #666; font-size: 10px;">&lt;600k tokens</span>
+              </button>
+              <button type="button" class="btn-level" data-level="fast" id="btnLevel1" style="flex: 1; padding: 6px 4px; font-size: 11px; border: 1px solid var(--border-default, #e5e5e5); border-radius: 6px; background: var(--bg-surface, #fff); cursor: pointer; text-align: center;">
+                <strong>Level 1</strong><br><span style="color: #666; font-size: 10px;">&lt;200k tokens</span>
+              </button>
+            </div>
+
+            <button id="btnGenerateAiClone" class="btn btn-hero-cta full-width">
+              Generate AI Clone (.zip)
+            </button>
+          </div>
+
+          <!-- LEVEL 1: Design Language & Theme Transfer Card -->
+          <div class="theme-export-card">
+            <div class="theme-card-header">
+              <div class="hero-title-wrap">
+                <div>
+                  <h2 class="theme-title">Extract Design Language</h2>
+                  <p class="theme-subtitle">Extract reusable visual identity without copying content or branding.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="theme-features-grid">
+              <div class="feature-item"><span class="check">✓</span> Colors & Shadows</div>
+              <div class="feature-item"><span class="check">✓</span> Typography Scale</div>
+              <div class="feature-item"><span class="check">✓</span> Button Systems</div>
+              <div class="feature-item"><span class="check">✓</span> Form & Input Specs</div>
+              <div class="feature-item"><span class="check">✓</span> Card Architecture</div>
+              <div class="feature-item"><span class="check">✓</span> Navigation Styles</div>
+              <div class="feature-item"><span class="check">✓</span> Motion Curves</div>
+              <div class="feature-item"><span class="check">✓</span> Responsive Grids</div>
+              <div class="feature-item"><span class="check">✓</span> Design Principles</div>
+              <div class="feature-item"><span class="check">✓</span> AI_Apply_Theme.md</div>
+              <div class="feature-item feature-highlight"><span class="check">✓</span> Zero Business Copy</div>
+            </div>
+
+            <button id="btnExtractDesignLanguage" class="btn btn-theme-cta full-width">
+              Extract Design Language (.zip)
+            </button>
+          </div>
+
+          <!-- LEVEL 1: Lightweight Bundle Sub-Card -->
+          <div class="sub-export-card">
+            <div class="sub-card-info">
+              <div class="sub-title-row">
+                <span class="sub-title">Lightweight Bundle</span>
+                <span class="badge badge-lightweight">&lt; 1MB</span>
+              </div>
+              <p class="sub-desc">Optimized single JSON bundle for token-limited AI models.</p>
+            </div>
+            <button id="btnExportLightweightBundle" class="btn btn-secondary full-width">
+              Export Lightweight Bundle
+            </button>
+          </div>
+
+          <!-- LEVEL 2: Advanced Section (Collapsible) -->
+          <div class="accordion-card">
+            <button id="btnToggleAdvanced" class="accordion-toggle">
+              <span class="acc-title">Advanced</span>
+              <span id="advancedArrow" class="acc-arrow">▼</span>
+            </button>
+            <div id="advancedSection" class="accordion-content hidden">
+              <p class="section-desc">Raw Agent Design Specification formats for direct prompt context.</p>
+              <div class="advanced-button-grid">
+                <button id="btnCopyAdsContext" class="btn btn-secondary btn-sm">
+                  Copy ADS Context
+                </button>
+                <button id="btnExportAdsJson" class="btn btn-secondary btn-sm">
+                  Export ADS JSON
+                </button>
+                <button id="btnExportAdsAll" class="btn btn-secondary btn-sm">
+                  Complete ADS Package
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LEVEL 3: Developer Tools Section (Collapsible) -->
+          <div class="accordion-card">
+            <button id="btnToggleDevTools" class="accordion-toggle">
+              <span class="acc-title">Developer Tools</span>
+              <span id="devToolsArrow" class="acc-arrow">→</span>
+            </button>
+            <div id="devToolsSection" class="accordion-content hidden">
+              <p class="section-desc">Inspect and export individual reverse engineering specifications.</p>
+              <div class="export-row">
+                <select id="exportFormatSelect" class="select-input">
+                  <option value="reconstruction-graph" selected>Reconstruction Graph (.json)</option>
+                  <option value="content-semantics">Content Semantics (.json)</option>
+                  <option value="motion-timelines">Motion Timelines (.json)</option>
+                  <option value="component-variants">Component Variants (.json)</option>
+                  <option value="typography-rhythm">Typography Rhythm (.json)</option>
+                  <option value="responsive-transitions">Responsive Transitions (.json)</option>
+                  <option value="constraints">Layout Constraints (.json)</option>
+                  <option value="render-tree">Rendering Order Tree (.json)</option>
+                  <option value="registry">Shared Object Registry (.json)</option>
+                  <option value="prompt">AI Reconstruction Prompt (.md)</option>
+                  <option value="accessibility">Accessibility Semantics (.json)</option>
+                  <option value="behavior">Behavior & Runtime States (.json)</option>
+                  <option value="design-system">Semantic Design System (.json)</option>
+                  <option value="animations">Animation Intelligence (.json)</option>
+                  <option value="interactions">Interaction Graph (.json)</option>
+                  <option value="responsive">Responsive Intelligence (.json)</option>
+                  <option value="layout">Layout Constraints (.json)</option>
+                  <option value="components-json">Reusable Components (.json)</option>
+                  <option value="component-tree">Component Tree (.json)</option>
+                  <option value="css">CSS Variables (.css)</option>
+                  <option value="tailwind">Tailwind Config (.js)</option>
+                  <option value="tokens">Design Tokens (.json)</option>
+                </select>
+                <button id="btnExportArtifact" class="btn btn-secondary">Export</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Colors Panel -->
+        <section id="tab-colors" class="tab-panel hidden">
+          <div class="panel-section">
+            <h2 class="section-title">Extracted Color Palette</h2>
+            <div id="colorSwatchesGrid" class="swatches-grid">
+              <div class="empty-state">No analysis performed yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Typography Panel -->
+        <section id="tab-typography" class="tab-panel hidden">
+          <div class="panel-section">
+            <h2 class="section-title">Typography System</h2>
+            <div id="typographyScaleList" class="typo-list">
+              <div class="empty-state">No analysis performed yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Spacing & Shapes Panel -->
+        <section id="tab-spacing" class="tab-panel hidden">
+          <div class="panel-section">
+            <h2 class="section-title">Spacing Scale (px)</h2>
+            <div id="spacingChipsList" class="chips-row">
+              <span class="chip">No data</span>
+            </div>
+          </div>
+          <div class="panel-section">
+            <h2 class="section-title">Corner Radius Scale</h2>
+            <div id="radiusChipsList" class="chips-row">
+              <span class="chip">No data</span>
+            </div>
+          </div>
+          <div class="panel-section">
+            <h2 class="section-title">Surface Style Categories</h2>
+            <div id="surfaceCategoryCounts" class="stats-list">
+              <div class="empty-state">No surface metrics extracted yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Layout & Sections Panel -->
+        <section id="tab-layout" class="tab-panel hidden">
+          <div class="panel-section">
+            <h2 class="section-title">Structural Page Sections</h2>
+            <div id="sectionsList" class="sections-list">
+              <div class="empty-state">No structural layout sections detected yet.</div>
+            </div>
+          </div>
+          <div class="panel-section">
+            <h2 class="section-title">Container Metrics</h2>
+            <div id="layoutMetricsList" class="metrics-grid">
+              <div class="metric-box">
+                <span class="metric-label">Flex Containers</span>
+                <span id="metricFlexCount" class="metric-val">0</span>
+              </div>
+              <div class="metric-box">
+                <span class="metric-label">Grid Containers</span>
+                <span id="metricGridCount" class="metric-val">0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Components Panel -->
+        <section id="tab-components" class="tab-panel hidden">
+          <div class="panel-section">
+            <h2 class="section-title">Detected Component Candidates</h2>
+            <div id="componentsList" class="components-list">
+              <div class="empty-state">No component structures detected yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. Element Inspector Panel -->
+        <section id="tab-inspector" class="tab-panel hidden">
+          <div class="panel-section">
+            <button id="btnSelectElement" class="btn btn-secondary full-width margin-bottom">
+              Select Element on Page
+            </button>
+            <div id="inspectedElementDetails" class="inspector-card">
+              <p class="empty-state">Click "Select Element" to inspect element details.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Privacy & Security Footer -->
+      <footer class="footer-bar">
+        <span class="footer-text">
+          Design analysis runs locally. Page content is not uploaded to remote services.
+        </span>
+      </footer>
+    </div>
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

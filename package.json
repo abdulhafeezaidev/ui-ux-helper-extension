@@ -1,0 +1,37 @@
+{
+  "name": "ui-ux-helper-extension",
+  "version": "0.1.0",
+  "description": "UI/UX Helper Chromium Extension Foundation",
+  "type": "module",
+  "main": "dist/background.js",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "tsc && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "audit:chrome": "npx tsx scripts/runRealChromeAudit.ts",
+    "audit:state-transitions": "npx tsx scripts/runStateTransitionAudit.ts",
+    "audit:extension": "npx tsx scripts/runRealExtensionAudit.ts",
+    "audit:e2e": "npx tsx scripts/runEndToEndReconstructionAudit.ts",
+    "audit:ads": "npx tsx C:\\Users\\abdul\\.gemini\\antigravity-ide\\scratch\\auditAdsQuality.ts",
+    "validate:reconstruction": "npx tsx C:\\Users\\abdul\\.gemini\\antigravity-ide\\scratch\\validateAdsReconstruction.ts",
+    "ci": "npm run typecheck && npm run test && npm run audit:ads && npm run validate:reconstruction && npm run build"
+  },
+  "keywords": [
+    "chromium-extension",
+    "manifest-v3",
+    "typescript",
+    "ui-ux-helper"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.308",
+    "@types/node": "^22.13.4",
+    "jsdom": "^26.0.0",
+    "puppeteer": "^24.3.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.1",
+    "vitest": "^3.0.6"
+  }
+}
